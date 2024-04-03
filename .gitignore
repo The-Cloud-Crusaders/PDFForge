@@ -1,0 +1,18 @@
+*.pyc
+__pycache__/
+venv/
+/.vscode/
+
+# Ignore localstack main folder
+volume/
+
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+.terraform.lock.hcl
+
+*ssh*
+
+.pytest_cache
+
+test.py
