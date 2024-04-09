@@ -1,0 +1,14 @@
+name: CD workflow on dev branch
+on:
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+
+  steps:
+    - name: install docker
+      uses: docker-practice/actions-setup-docker@master
+
