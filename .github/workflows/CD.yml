@@ -17,13 +17,13 @@ jobs:
 
       - name: login to docker
         run: |
-           echo "${{ secrets.DOCKER_Password }}" || docker login -u ${{ secrets.DOCKER_USERNAME }} -i
+           echo '${{ secrets.DOCKER_Password }}' || docker login -u ${{ secrets.DOCKER_USERNAME }} -i
 
 
       - name: create docker-image
         run: docker build -t dockimg:dev1 .
 
       - name: push code
-        run: docker push {{ secrets.DOCKER_REPOSITORY }}/dockimg:dev1
+        run: docker push ${{ secrets.DOCKER_REPOSITORY }}/dockimg:dev1
 
 
