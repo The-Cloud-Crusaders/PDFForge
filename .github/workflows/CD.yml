@@ -17,7 +17,8 @@ jobs:
 
       - name: login to docker
         run: |
-           echo '${{ secrets.DOCKER_PASSWORD }}' || docker login -u ${{ secrets.DOCKER_USERNAME }} -i
+            echo "dckr_pat_wwBmtNwTsoan45QSiBEPYq1Cp84" || docker login -u krutipatel15
+#           echo '${{ secrets.DOCKER_PASSWORD }}' || docker login -u ${{ secrets.DOCKER_USERNAME }} -i
 
 
       - name: create docker-image
