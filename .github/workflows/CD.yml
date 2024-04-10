@@ -21,9 +21,9 @@ jobs:
 
 
       - name: create docker-image
-        run: docker build -t ${{ secrets.DOCKER_REPOSITORY }}/devops-project:img1 .
+        run: docker build -t ${{ secrets.DOCKER_REPOSITORY }}:img1 .
 
       - name: push code
-        run: docker push ${{ secrets.DOCKER_REPOSITORY }}/dev0ps-project:img1
+        run: docker push ${{ secrets.DOCKER_REPOSITORY }}:img1
 
 
