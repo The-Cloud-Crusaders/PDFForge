@@ -1,4 +1,4 @@
-name: CD workflow on dev branch
+name: CD workflow on dev/prod branch
 on:
   push:
     branches:
