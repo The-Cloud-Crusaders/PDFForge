@@ -1,6 +1,6 @@
 name: CD workflow on dev branch
 on:
-  pull_request:
+  pull-request:
     branches:
       - dev
 
@@ -9,6 +9,21 @@ jobs:
     runs-on: ubuntu-latest
 
   steps:
+    - name: checkout the code
+      uses: actions/checkout@v2
+
     - name: install docker
       uses: docker-practice/actions-setup-docker@master
+
+    - name: login to docker
+      run: |
+       docker login -u ${{ secrets.DOCKER_USERNAME }}
+       echo "${{ secrets.DOCKER_Password }}
+
+    - name: create docker-image
+      run: docker build -t dockimg:dev1 .
+
+    - name: push code
+      run: docker push {{ secrets.DOCKER_REPOSITORY }}/dockimg:dev1
+
 
