@@ -1,6 +1,6 @@
 name: CD workflow on dev branch
 on:
-  workflow_dispatch:
+  push:
     branches:
       - dev
 
