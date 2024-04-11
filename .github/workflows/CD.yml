@@ -35,7 +35,7 @@ jobs:
           fi
 
       - name: push image
-        run:
+        run: |
           if ${{ github.ref_name == 'dev' }}
           then
             docker push ${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}
