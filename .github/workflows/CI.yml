@@ -1,4 +1,4 @@
-name: Run CI workflow on dev branch
+name: CI
 
 on:
   pull_request:
@@ -30,7 +30,6 @@ jobs:
   unit-testing:
     runs-on: ubuntu-latest
     needs: linting
-
     steps:
       - name: checkout code
         uses: actions/checkout@v2
@@ -53,3 +52,19 @@ jobs:
 
       - name: do pytest
         run: pytest
+
+  assign-reviewer:
+    runs-on: ubuntu-latest
+    needs: unit-testing
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Assign reviewers
+        uses: monty16597/github-pr-reviewer-request-action@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          repo_name: ${{ github.repository }}
+          pr_number: ${{ github.event.number }}
+          pr_reviewers: 'krutipatel15,monty16597'
+          do_comment: true
+          custom_comment: 'Please review this PR @krutipatel15'
