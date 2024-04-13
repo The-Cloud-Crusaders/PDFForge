@@ -23,7 +23,7 @@ services:
     volumes:
       - $PWD:/app
     environment:
-      # - APP_AWS_ENDPOINT_URL=http://localstack-main:4566
+      - APP_AWS_ENDPOINT_URL=http://localstack-main:4566
       - APP_AWS_ACCESS_KEY_ID=test
       - APP_AWS_SECRET_ACCESS_KEY=test
       - APP_AWS_REGION_NAME=ca-central-1
