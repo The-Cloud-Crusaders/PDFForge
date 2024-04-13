@@ -1,8 +1,7 @@
 from flask import Flask
-from config import AppConfig
 
 
-def create_app(config=AppConfig):
+def create_app(config=None):
     app = Flask(__name__)
 
     # Configuration setup

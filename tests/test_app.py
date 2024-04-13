@@ -13,7 +13,7 @@ def test_generate_pdf_and_upload_to_s3(client, aws_client):
     # Assertions
     assert response.status_code == 200
     data = json.loads(response.data)
-    assert "download_url" in data
+    assert "generate_url" in data
     delete_bucket(aws_client=aws_client)
 
 

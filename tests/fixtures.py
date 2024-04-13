@@ -26,7 +26,7 @@ def aws_client():
         session = boto3.Session(
             aws_access_key_id=TestingConfig.AWS_ACCESS_KEY_ID,
             aws_secret_access_key=TestingConfig.AWS_SECRET_ACCESS_KEY,
-            region_name=TestingConfig.AWS_REGION_NAME,
+            region_name=TestingConfig.AWS_APP_REGION_NAME,
         )
 
         return session.client(service_name, endpoint_url=TestingConfig.AWS_ENDPOINT_URL)
