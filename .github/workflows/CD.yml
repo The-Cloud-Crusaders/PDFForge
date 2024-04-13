@@ -69,10 +69,10 @@ jobs:
             if ${{ github.ref_name == 'dev' }}
             then
               docker pull ${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}
-              docker run -d -p 80:5000 ${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}
+              docker run -d -e APP_AWS_REGION_NAME='ca-central-1' -p 80:5000 ${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}
             else
               docker pull ${{ secrets.DOCKER_REPOSITORY }}:${{ github.ref_name }}
-              docker run -d -p 80:5000 ${{ secrets.DOCKER_REPOSITORY }}:${{ github.ref_name }}
+              docker run -d -e APP_AWS_REGION_NAME='ca-central-1' -p 80:5000 ${{ secrets.DOCKER_REPOSITORY }}:${{ github.ref_name }}
             fi
 
   healthcheck:
