@@ -1,5 +1,5 @@
 import os
-from flask import Blueprint, request, jsonify, render_template
+from flask import Blueprint, request, jsonify
 from reportlab.pdfgen import canvas
 from ..controllers import upload_pdf_file, generate_presigned_url
 
@@ -66,11 +66,11 @@ def generate_pdf():
         )
 
     return (
-                jsonify(
-                    {
-                        "success": None,
-                        "error": "Invalid request method"
-                    }
-                ),
-                502,
-            )
+        jsonify(
+            {
+                "success": None,
+                "error": "Invalid request method"
+            }
+        ),
+        502,
+    )
