@@ -8,6 +8,8 @@ on:
     types:
       - created
 
+  workflow_dispatch:
+
 jobs:
   build:
     environment: ${{ github.ref_name }}
@@ -27,6 +29,12 @@ jobs:
 
       - name: create image
         run: | 
+          if ${{ github.ref_name != 'dev' && github.event_name == 'workflow_dispatch' }}
+          then
+            echo "Workflow dispatch is only allowed on dev branch."
+            exit 1
+          fi
+          
           if ${{ github.ref_name == 'dev' }}
           then
             docker build -t ${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }} .
