@@ -15,7 +15,7 @@ def generate_pdf():
         last_name = request.form.get("last_name", "")
 
         # Create a PDF file
-        pdf_filename = f"{first_name}_{last_name}_info.pdf"
+        pdf_filename = f"/tmp/{first_name}_{last_name}_info.pdf"
         pdf = canvas.Canvas(pdf_filename)
 
         pdf.drawString(100, 750, "First Name:")

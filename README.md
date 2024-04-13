@@ -15,7 +15,7 @@ pytest -s
 ```bash
 pip install -r requirements.txt
 docker-compose up -d localstack
-AWS_ENDPOINT_URL=http://localhost:4566 flask run
+APP_AWS_ENDPOINT_URL=http://localhost:4566 flask run
 curl -X POST -H "Content-Type: application/json" -d '{"first_name": "John", "last_name": "Doe"}' http://localhost:5000/generate_pdf
 aws s3 ls s3://myapp-pub-assets --endpoint-url=http://localhost:4566
 ```
