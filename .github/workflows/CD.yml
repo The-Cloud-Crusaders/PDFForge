@@ -43,7 +43,7 @@ jobs:
             IMAGE=${{ secrets.DOCKER_REPOSITORY }}:${{ github.ref_name }}
           fi
           
-          docker build -t ${{ secrets.DOCKER_REPOSITORY }}:$IMAGE .
+          docker build -t $IMAGE .
 
       - name: push image
         run: |
@@ -55,7 +55,7 @@ jobs:
             IMAGE=${{ secrets.DOCKER_REPOSITORY }}:${{ github.ref_name }}
           fi
           
-          docker push ${{ secrets.DOCKER_REPOSITORY }}:$IMAGE
+          docker push $IMAGE
 
   deploy:
     runs-on: ubuntu-latest
@@ -72,16 +72,22 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            IMAGE=${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}
+            IMAGE_TAG=${{ github.sha }}
             if ${{ github.ref_name == 'dev' }}
             then
-              IMAGE=${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}
+              IMAGE_TAG=${{ github.sha }}
               BUCKET_NAME=pdfforge-dev-assets
             else
-              IMAGE=${{ secrets.DOCKER_REPOSITORY }}:${{ github.ref_name }}
+              IMAGE_TAG=${{ secrets.DOCKER_REPOSITORY }}:${{ github.ref_name }}
               BUCKET_NAME=pdfforge-prod-assets
             fi
-            docker pull ${{ secrets.DOCKER_REPOSITORY }}:$IMAGEdocker run --name pdfforge-app-${{ github.ref_name}} -d -e APP_AWS_S3_BUCKET_NAME=$BUCKET_NAME -e APP_AWS_REGION_NAME=ca-central-1 -p 80:5000 $IMAGE
+            docker pull ${{ secrets.DOCKER_REPOSITORY }}:$IMAGE_TAG
+            docker run --name pdfforge-app-${{ github.ref_name}} -d \
+              -e APP_AWS_S3_BUCKET_NAME=$BUCKET_NAME \
+              -e APP_AWS_REGION_NAME=ca-central-1 \
+              -e DOCKER_REPOSITORY=${{ secrets.DOCKER_REPOSITORY }} \
+              -e DOCKER_IMAGE_TAG=$IMAGE_TAG \
+              -p 80:5000 ${{ secrets.DOCKER_REPOSITORY }}:$IMAGE_TAG
             docker rm -f pdfforge-app-${{ github.ref_name}} || true
             
 
