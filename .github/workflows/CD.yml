@@ -66,3 +66,17 @@ jobs:
               docker pull ${{ secrets.DOCKER_REPOSITORY }}:${{ github.ref_name }}
               docker run -d -p 80:5000 ${{ secrets.DOCKER_REPOSITORY }}:${{ github.ref_name }}
             fi
+
+  healthcheck:
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref_name }}
+    needs: build
+    steps:
+      - name: Check the deployed service URL
+      uses: jtalk/url-health-check-action@v4
+      with:
+        # Check the following URLs one by one sequentially
+        url: http://${{ secrets.SSH_HOST }}/health
+        follow-redirect: true # Optional, defaults to false
+        max-attempts: 3 # Optional, defaults to 1
+        retry-delay: 5s # Optional, only applicable to max-attempts > 1
