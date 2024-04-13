@@ -70,7 +70,7 @@ jobs:
   healthcheck:
     runs-on: ubuntu-latest
     environment: ${{ github.ref_name }}
-    needs: build
+    needs: deploy
     steps:
       - name: Check the deployed service URL
         uses: jtalk/url-health-check-action@v4
