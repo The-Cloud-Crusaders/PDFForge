@@ -1,8 +1,5 @@
 FROM python:3.10-alpine
 
-# Set the working directory
-WORKDIR /app
-
 # Install GCC and C++ build libraries
 RUN apk add --no-cache gcc g++ make
 
@@ -13,8 +10,11 @@ RUN pip install --no-cache-dir -r /tmp/requirements.txt
 # Copy the current folder to the container
 COPY . /app
 
+# Set the working directory
+WORKDIR /app
+
 # Expose port 5000
 EXPOSE 5000
 
 # Run the Flask app
-CMD ["python", "main.py"]
+CMD ["flask", "run", "--host=0.0.0.0", "--debug", "--reload"]

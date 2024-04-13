@@ -9,12 +9,10 @@ main_bp = Blueprint("pdf", __name__)
 @main_bp.route("/generate_pdf", methods=["POST"])
 def generate_pdf():
     if request.method == "POST":
-        # Get data from the POST request
-        data = request.get_json()
 
         # Extract first name and last name from the received data
-        first_name = data.get("first_name", "")
-        last_name = data.get("last_name", "")
+        first_name = request.form.get("first_name", "")
+        last_name = request.form.get("last_name", "")
 
         # Create a PDF file
         pdf_filename = f"{first_name}_{last_name}_info.pdf"
@@ -31,7 +29,15 @@ def generate_pdf():
         try:
             upload_pdf_file(pdf_filename)
         except Exception as e:
-            return jsonify({"error": f"Failed to uploading file: {e}"}), 500
+            return (
+                jsonify(
+                    {
+                        "success": None,
+                        "error": f"Failed to uploading file: {e}"
+                    }
+                ),
+                502,
+            )
 
         os.remove(pdf_filename)
 
@@ -39,16 +45,32 @@ def generate_pdf():
         try:
             download_url = generate_presigned_url(pdf_filename)
         except Exception as e:
-            return jsonify({"error": f"Failed to generate public URL: {e}"}), 500
+            return (
+                jsonify(
+                    {
+                        "success": None,
+                        "error": f"Failed to generate public URL: {e}"
+                    }
+                ),
+                502,
+            )
 
         return (
             jsonify(
                 {
-                    "message": "PDF created and uploaded to cloud successfully!",
-                    "download_url": download_url,
+                    "success": "PDF Generated Successfully!",
+                    "generate_url": download_url,
                 }
             ),
             200,
         )
 
-    return jsonify({"error": "Invalid request method"}), 405
+    return (
+        jsonify(
+            {
+                "success": None,
+                "error": "Invalid request method"
+            }
+        ),
+        502,
+    )
