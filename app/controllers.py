@@ -5,8 +5,8 @@ from config import AppConfig
 
 # boto3 session with AWS credentials ##
 session = boto3.Session(
-    APP_AWS_ACCESS_KEY_ID=AppConfig.APP_AWS_ACCESS_KEY_ID,
-    APP_AWS_SECRET_ACCESS_KEY=AppConfig.APP_AWS_SECRET_ACCESS_KEY,
+    aws_access_key_id=AppConfig.APP_AWS_ACCESS_KEY_ID,
+    aws_secret_access_key=AppConfig.APP_AWS_SECRET_ACCESS_KEY,
     region_name=AppConfig.APP_AWS_REGION_NAME,
 )
 
