@@ -17,4 +17,4 @@ WORKDIR /app
 EXPOSE 5000
 
 # Run the Flask app
-CMD ["flask", "run", "--host=0.0.0.0", "--debug", "--reload"]
+CMD ["flask", "run", "--host=0.0.0.0"]

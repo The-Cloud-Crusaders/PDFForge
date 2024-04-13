@@ -1,12 +1,8 @@
 from flask import Flask
 
 
-def create_app(config=None):
+def create_app():
     app = Flask(__name__)
-
-    # Configuration setup
-    app.config.from_object(config)
-    app.app_context().push()
 
     # Blueprint registration
     from .blueprints.pdf import main_bp

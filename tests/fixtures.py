@@ -2,18 +2,18 @@ import boto3
 import pytest
 import sys
 import os
+from config import AppConfig
 
 # Add the parent directory of app to the Python path
 current_dir = os.path.dirname(os.path.dirname(__file__))
 sys.path.append(current_dir)
 
 from app import create_app
-from config import TestingConfig
 
 
 @pytest.fixture
 def client():
-    app = create_app(TestingConfig)
+    app = create_app()
     app.config["TESTING"] = True
     with app.test_client() as client:
         with app.app_context():
@@ -24,12 +24,12 @@ def client():
 def aws_client():
     def _create_client(service_name):
         session = boto3.Session(
-            aws_access_key_id=TestingConfig.AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=TestingConfig.AWS_SECRET_ACCESS_KEY,
-            region_name=TestingConfig.AWS_APP_REGION_NAME,
+            aws_access_key_id=AppConfig.APP_AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=AppConfig.APP_AWS_SECRET_ACCESS_KEY,
+            region_name=AppConfig.APP_AWS_REGION_NAME,
         )
 
-        return session.client(service_name, endpoint_url=TestingConfig.AWS_ENDPOINT_URL)
+        return session.client(service_name, endpoint_url=AppConfig.APP_AWS_ENDPOINT_URL)
 
     return _create_client
 
@@ -38,20 +38,20 @@ def create_test_bucket(aws_client):
     # Create a test bucket
     s3_client = aws_client("s3")
     try:
-        s3_client.head_bucket(Bucket=TestingConfig.AWS_S3_BUCKET_NAME)
+        s3_client.head_bucket(Bucket=AppConfig.APP_AWS_S3_BUCKET_NAME)
     except s3_client.exceptions.ClientError:
-        s3_client.create_bucket(Bucket=TestingConfig.AWS_S3_BUCKET_NAME)
-        print(f"Created a test bucket: {TestingConfig.AWS_S3_BUCKET_NAME}")
+        s3_client.create_bucket(Bucket=AppConfig.APP_AWS_S3_BUCKET_NAME)
+        print(f"Created a test bucket: {AppConfig.APP_AWS_S3_BUCKET_NAME}")
 
 def delete_bucket(aws_client):
     s3_client = aws_client("s3")
     # Delete all objects in the bucket
-    response = s3_client.list_objects_v2(Bucket=TestingConfig.AWS_S3_BUCKET_NAME)
+    response = s3_client.list_objects_v2(Bucket=AppConfig.APP_AWS_S3_BUCKET_NAME)
     if response.get("Contents"):
         for obj in response["Contents"]:
             s3_client.delete_object(
-                Bucket=TestingConfig.AWS_S3_BUCKET_NAME, Key=obj["Key"]
+                Bucket=AppConfig.APP_AWS_S3_BUCKET_NAME, Key=obj["Key"]
             )
             print(f'Deleted the object: {obj["Key"]}')
-    s3_client.delete_bucket(Bucket=TestingConfig.AWS_S3_BUCKET_NAME)
-    print(f"Deleted the test bucket: {TestingConfig.AWS_S3_BUCKET_NAME}")
+    s3_client.delete_bucket(Bucket=AppConfig.APP_AWS_S3_BUCKET_NAME)
+    print(f"Deleted the test bucket: {AppConfig.APP_AWS_S3_BUCKET_NAME}")

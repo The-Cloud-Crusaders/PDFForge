@@ -23,11 +23,11 @@ services:
     volumes:
       - $PWD:/app
     environment:
-      # - AWS_ENDPOINT_URL=http://localstack-main:4566
-      - AWS_ACCESS_KEY_ID=test
-      - AWS_SECRET_ACCESS_KEY=test
-      - AWS_APP_REGION_NAME=ca-central-1
-      - AWS_S3_BUCKET_NAME=testing-manjeet-c0
+      - APP_AWS_ENDPOINT_URL=http://localstack-main:4566
+      - APP_AWS_ACCESS_KEY_ID=test
+      - APP_AWS_SECRET_ACCESS_KEY=test
+      - APP_AWS_REGION_NAME=ca-central-1
+      - APP_AWS_S3_BUCKET_NAME=testing-manjeet-c0
     ports:
       - 5000:5000
     # depends_on: 
