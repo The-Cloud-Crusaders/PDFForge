@@ -20,7 +20,7 @@ def upload_pdf_file(pdf_filename):
     # Upload the generated PDF to S3
     try:
         s3_client.upload_file(
-            pdf_filename, AppConfig.APP_AWS_S3_BUCKET_NAME, os.path.basename(pdf_filename)
+            pdf_filename, AppConfig.APP_AWS_S3_BUCKET_NAME, pdf_filename
         )
     except ClientError as e:
         raise e
