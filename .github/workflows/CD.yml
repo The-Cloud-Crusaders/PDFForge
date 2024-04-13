@@ -34,22 +34,28 @@ jobs:
             echo "Workflow dispatch is only allowed on dev branch."
             exit 1
           fi
-          
+
+          IMAGE=${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}
           if ${{ github.ref_name == 'dev' }}
           then
-            docker build -t ${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }} .
+            IMAGE=${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}
           else
-            docker build -t ${{ secrets.DOCKER_REPOSITORY }}:${{ github.ref_name }} .
+            IMAGE=${{ secrets.DOCKER_REPOSITORY }}:${{ github.ref_name }}
           fi
+          
+          docker build -t ${{ secrets.DOCKER_REPOSITORY }}:$IMAGE .
 
       - name: push image
         run: |
+          IMAGE=${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}
           if ${{ github.ref_name == 'dev' }}
           then
-            docker push ${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}
+            IMAGE=${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}
           else
-            docker push ${{ secrets.DOCKER_REPOSITORY }}:${{ github.ref_name }}
+            IMAGE=${{ secrets.DOCKER_REPOSITORY }}:${{ github.ref_name }}
           fi
+          
+          docker push ${{ secrets.DOCKER_REPOSITORY }}:$IMAGE
 
   deploy:
     runs-on: ubuntu-latest
@@ -66,16 +72,18 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            IMAGE=${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}
             if ${{ github.ref_name == 'dev' }}
             then
-              docker pull ${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}
-              docker rm -f pdfforge-app-${{ github.ref_name}} || true
-              docker run --name pdfforge-app-${{ github.ref_name}} -d -e APP_AWS_REGION_NAME='ca-central-1' -p 80:5000 ${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}
+              IMAGE=${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}
+              BUCKET_NAME=pdfforge-dev-assets
             else
-              docker pull ${{ secrets.DOCKER_REPOSITORY }}:${{ github.ref_name }}
-              docker rm -f pdfforge-app-${{ github.ref_name}} || true
-              docker run --name pdfforge-app-${{ github.ref_name}} -d -e APP_AWS_REGION_NAME='ca-central-1' -p 80:5000 ${{ secrets.DOCKER_REPOSITORY }}:${{ github.ref_name }}
+              IMAGE=${{ secrets.DOCKER_REPOSITORY }}:${{ github.ref_name }}
+              BUCKET_NAME=pdfforge-prod-assets
             fi
+            docker pull ${{ secrets.DOCKER_REPOSITORY }}:$IMAGEdocker run --name pdfforge-app-${{ github.ref_name}} -d -e APP_AWS_S3_BUCKET_NAME=$BUCKET_NAME -e APP_AWS_REGION_NAME=ca-central-1 -p 80:5000 $IMAGE
+            docker rm -f pdfforge-app-${{ github.ref_name}} || true
+            
 
   healthcheck:
     runs-on: ubuntu-latest
