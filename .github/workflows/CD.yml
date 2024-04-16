@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   build:
-    environment: ${{ github.ref_name }}
+    environment: ${{ github.ref_name == 'dev' && 'dev' || 'prod' }}
     runs-on: ubuntu-latest
     steps:
       - name: checkout the code
