@@ -9,8 +9,6 @@ pip install -r requirements.txt
 docker-compose up -d localstack
 pytest -s
 ```
-
-
 ### To run app on localstack
 ```bash
 pip install -r requirements.txt
