@@ -7,3 +7,4 @@ class AppConfig:
     APP_AWS_ACCESS_KEY_ID = os.getenv("APP_AWS_ACCESS_KEY_ID", None)
     APP_AWS_SECRET_ACCESS_KEY = os.getenv("APP_AWS_SECRET_ACCESS_KEY", None)
     APP_AWS_REGION_NAME = os.getenv("APP_AWS_REGION_NAME", "us-east-1")
+    TEST = "test"
