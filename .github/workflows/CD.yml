@@ -63,7 +63,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name }}
+    environment: ${{ github.ref_name == 'dev' && 'dev' || 'prod' }}
     needs: build
     steps:
       - name: checkout the code
@@ -97,7 +97,7 @@ jobs:
 
   healthcheck:
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name }}
+    environment: ${{ github.ref_name == 'dev' && 'dev' || 'prod' }}
     needs: deploy
     steps:
       - name: Check the deployed service URL
